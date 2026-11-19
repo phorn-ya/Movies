@@ -1,11 +1,11 @@
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY?.trim()
 const BASE_URL = 'https://api.themoviedb.org/3'
 const IMAGE_BASE = 'https://image.tmdb.org/t/p/'
 
 async function tmdbFetch(path, params = {}) {
-  if (!API_KEY) {
+  if (!API_KEY || /^(your|<|insert|replace)/i.test(API_KEY)) {
     throw new Error(
-      'Missing TMDB API key. Copy .env.example to .env and add VITE_TMDB_API_KEY.'
+      'TMDB API key is missing or still a placeholder. Add your key to .env as VITE_TMDB_API_KEY, then restart the dev server.'
     )
   }
   const url = new URL(BASE_URL + path)
@@ -18,6 +18,11 @@ async function tmdbFetch(path, params = {}) {
   })
 
   const res = await fetch(url.toString())
+  if (res.status === 401) {
+    throw new Error(
+      'TMDB rejected the API key. Use the API Key (v3 auth), not the API Read Access Token or a Cloudflare key, then restart the dev server.'
+    )
+  }
   if (!res.ok) {
     throw new Error(`TMDB request failed (${res.status})`)
   }

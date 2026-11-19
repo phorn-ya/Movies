@@ -54,7 +54,7 @@ export default function SearchResults() {
         </div>
       )}
 
-      <MovieGrid movies={movies} />
+      {(movies.length > 0 || status === 'ready') && <MovieGrid movies={movies} />}
 
       {page < totalPages && movies.length > 0 && (
         <div className="load-more-row">

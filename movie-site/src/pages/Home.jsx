@@ -67,7 +67,7 @@ export default function Home() {
           <p className="state-msg error">Couldn't load movies — {error}</p>
         )}
 
-        <MovieGrid movies={movies} />
+        {(movies.length > 0 || status === 'ready') && <MovieGrid movies={movies} />}
 
         {status === 'loading' && movies.length === 0 && (
           <div style={{ textAlign: 'center' }}>

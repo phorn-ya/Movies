@@ -17,7 +17,7 @@ export default function Header() {
     <header className="site-header">
       <div className="wrap">
         <a href="/" className="brand" onClick={(e) => { e.preventDefault(); navigate('/') }}>
-          REEL HOUSE <span>NOW SHOWING</span>
+          CINESTREAM <span>Official</span>
         </a>
 
         <form className="search-form" onSubmit={handleSubmit} role="search">

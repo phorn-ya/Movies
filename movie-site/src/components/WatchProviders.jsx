@@ -1,4 +1,5 @@
 import { getImageUrl } from '../api/tmdb.js'
+import { REGIONS } from '../context/RegionContext.jsx'
 
 const GROUPS = [
   { key: 'flatrate', label: 'Stream', icon: '▶' },
@@ -8,14 +9,16 @@ const GROUPS = [
 
 export default function WatchProviders({ data, region }) {
   const regionData = data?.results?.[region]
+  const regionLabel = REGIONS.find((item) => item.code === region)?.label ?? region
 
   return (
-    <div className="providers-block">
-      <h2>Where to Watch</h2>
+    <section className="providers-block" id="watch-options" aria-labelledby="watch-options-title">
+      <h2 id="watch-options-title">Legal Watch Options</h2>
 
       {!regionData ? (
         <p className="providers-empty">
-          No streaming, rental, or purchase options found for this title in {region} right now.
+          No streaming, rental, or purchase options are listed for {regionLabel} right now.
+          Try changing the region in the header.
         </p>
       ) : (
         <>
@@ -27,22 +30,24 @@ export default function WatchProviders({ data, region }) {
                 <h3>
                   <span aria-hidden="true">{group.icon}</span> {group.label}
                 </h3>
-                <div className="provider-logos">
+                <div className="provider-options">
                   {providers.map((p) => (
                     <a
                       key={p.provider_id}
                       href={regionData.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="provider-logo"
-                      title={`Watch on ${p.provider_name}`}
-                      aria-label={`Watch on ${p.provider_name}`}
+                      className="provider-option"
+                      title={`Check ${p.provider_name} availability on JustWatch`}
+                      aria-label={`Check ${p.provider_name} availability on JustWatch`}
                     >
                       <img
                         src={getImageUrl(p.logo_path, 'w92')}
-                        alt={p.provider_name}
+                        alt=""
                         loading="lazy"
                       />
+                      <span>{p.provider_name}</span>
+                      <span className="provider-option-arrow" aria-hidden="true">↗</span>
                     </a>
                   ))}
                 </div>
@@ -57,23 +62,24 @@ export default function WatchProviders({ data, region }) {
               rel="noreferrer"
               className="watch-now-btn"
             >
-              ▶ Watch Now
+              Find a service on JustWatch ↗
             </a>
           )}
         </>
       )}
 
       <p className="jw-attribution">
-        Streaming data from JustWatch via The Movie Database.
+        Availability for {regionLabel} from JustWatch via TMDB. Playback takes place on the
+        selected service.
         {regionData?.link && (
           <>
             {' '}
             <a href={regionData.link} target="_blank" rel="noreferrer">
-              View all options →
+              View all options on JustWatch →
             </a>
           </>
         )}
       </p>
-    </div>
+    </section>
   )
 }

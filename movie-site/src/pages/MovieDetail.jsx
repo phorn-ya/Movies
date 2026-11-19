@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { getMovieDetails, getWatchProviders, getMovieVideos, findTrailerKey, getImageUrl } from '../api/tmdb.js'
 import { useRegion } from '../context/RegionContext.jsx'
 import WatchProviders from '../components/WatchProviders.jsx'
-import VideoPlayer from '../components/VideoPlayer.jsx'
+import TrailerModal from '../components/TrailerModal.jsx'
 
 function formatDuration(minutes) {
   if (!minutes || minutes <= 0) return null
@@ -65,7 +65,7 @@ export default function MovieDetail() {
       <div className="wrap" style={{ padding: '80px 24px', textAlign: 'center' }}>
         <p className="state-msg error">Couldn't load this title — {error}</p>
         <Link to="/" className="back-link" style={{ justifyContent: 'center' }}>
-          ← Back to Reel House
+          ← Back
         </Link>
       </div>
     )
@@ -106,44 +106,31 @@ export default function MovieDetail() {
                   className="action-btn play-btn"
                   onClick={() => setShowTrailer(true)}
                 >
-                  ▶ Play Trailer
+                  ▶ Play
                 </button>
               )}
-              {providers?.results?.[region]?.link && (
-                <a
-                  href={providers.results[region].link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="action-btn watch-btn"
-                >
-                  🍿 Where to Watch
-                </a>
-              )}
+              <a
+                href="#watch-options"
+                className="action-btn watch-btn"
+                aria-label={`Find legal watch options for ${movie.title}`}
+              >
+                🍿 Find Legal Watch Options
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Inline Trailer */}
       {showTrailer && trailerKey && (
-        <div className="wrap trailer-section">
-          <VideoPlayer
-            videoKey={trailerKey}
-            title={`Trailer for ${movie.title}`}
-            size="hero"
-            autoPlay
-          />
-          <button
-            className="trailer-close-btn"
-            onClick={() => setShowTrailer(false)}
-          >
-            ✕ Close Trailer
-          </button>
-        </div>
+        <TrailerModal
+          videoKey={trailerKey}
+          title={`Trailer for ${movie.title}`}
+          onClose={() => setShowTrailer(false)}
+        />
       )}
 
       <div className="wrap">
-        <Link to="/" className="back-link">← Back to Reel House</Link>
+        <Link to="/" className="back-link">← Back</Link>
 
         <div className="detail-body">
           <div className="overview-block">

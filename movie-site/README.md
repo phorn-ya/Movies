@@ -14,11 +14,20 @@ to legitimate providers.
 
 ## 2. Configure the project
 
+On Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+On macOS/Linux:
+
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and paste your key:
+Open `.env`, replace `your_api_key_here` with your TMDB API key, then restart
+the dev server if it is already running:
 
 ```
 VITE_TMDB_API_KEY=your_actual_key_here
@@ -54,6 +63,9 @@ static files (Vercel, Netlify, Cloudflare Pages, GitHub Pages, S3, etc.).
 - **Region matters.** Streaming availability differs by country. Use the
   region dropdown in the header — it's saved in the browser so it
   persists between visits.
+- **Trailer settings.** The embedded YouTube controls provide playback
+  speed and available quality options. The player also has an app-side sleep
+  timer; annotations are disabled in this embed.
 - **Attribution.** Per TMDB's and JustWatch's terms, the footer credits
   TMDB and the "Where to Watch" panel credits JustWatch. Keep both if
   you deploy this.

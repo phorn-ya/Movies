@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getImageUrl, getMovieVideos, findTrailerKey } from '../api/tmdb.js'
-import VideoPlayer from './VideoPlayer.jsx'
+import TrailerModal from './TrailerModal.jsx'
 
 export default function MarqueeHero({ movie }) {
   const [trailerKey, setTrailerKey] = useState(null)
@@ -41,7 +41,7 @@ export default function MarqueeHero({ movie }) {
               className="action-btn play-btn"
               onClick={() => setShowTrailer(true)}
             >
-              ▶ Play Trailer
+              ▶ Play
             </button>
           )}
           <Link to={`/movie/${movie.id}`} className="action-btn watch-btn">
@@ -51,22 +51,11 @@ export default function MarqueeHero({ movie }) {
       </div>
 
       {showTrailer && trailerKey && (
-        <div className="trailer-section" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10, background: 'var(--bg)', padding: '20px 24px 0' }}>
-          <div className="wrap">
-            <VideoPlayer
-              videoKey={trailerKey}
-              title={`Trailer for ${movie.title}`}
-              size="hero"
-              autoPlay
-            />
-            <button
-              className="trailer-close-btn"
-              onClick={() => setShowTrailer(false)}
-            >
-              ✕ Close Trailer
-            </button>
-          </div>
-        </div>
+        <TrailerModal
+          videoKey={trailerKey}
+          title={`Trailer for ${movie.title}`}
+          onClose={() => setShowTrailer(false)}
+        />
       )}
     </section>
   )
